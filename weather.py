@@ -97,7 +97,7 @@ def find_min(weather_data):
         min_value=weather_data[0]
         min_index=0
         for i in range(1,len(weather_data)):
-        # compare 1st element and 2nd element
+        # compare 1st element and 2nd element. set range from 1 
         # if weather[i] is smaller than min_value
         # it becomes min_value
         # and give the position
@@ -109,9 +109,6 @@ def find_min(weather_data):
     else:
         return()
    
-
-# print(find_min([]))
-
 
 
 
@@ -135,7 +132,7 @@ def find_max(weather_data):
     else:
         return ()
     
-print(find_max([49, 57, 56, 55, 57, 53, 49]))
+# print(find_max([49, 57, 56, 55, 57, 53, 49]))
 
 
 def generate_summary(weather_data):
@@ -146,7 +143,43 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+
+  
+    min_f_data=[]
+    max_f_data=[]
+    dates_data=[]
+    # check the length of the array ->8 Day Overview
+    days=len(weather_data)
+
+    for data in weather_data:
+       dates_data.append(data[0])
+       min_f_data.append(data[1])
+       max_f_data.append(data[2])
+
+
+    #  find min F
+    (min_f_deg_final,min_index)=find_min(min_f_data)
+    (max_f_deg_final,max_index)=find_max(max_f_data)
+
+    # # covert to min F deg to  Cel
+    min_c_deg=format_temperature(convert_f_to_c(min_f_deg_final))
+    max_c_deg=format_temperature(convert_f_to_c(max_f_deg_final))
+    # get dates using index of temp(it has original index)
+    min_date=convert_date(dates_data[min_index])
+    max_date=convert_date(dates_data[max_index])
+  
+
+    # get min temp mean
+    min_mean=calculate_mean(min_f_data)
+    min_mean_deg=format_temperature(convert_f_to_c(min_mean))
+    max_mean=calculate_mean(max_f_data)
+    max_mean_deg=format_temperature(convert_f_to_c(max_mean))
+
+    
+    return f'{days} Day Overview\n  The lowest temperature will be {min_c_deg}, and will occur on {min_date}.\n  The highest temperature will be {max_c_deg}, and will occur on {max_date}.\n  The average low this week is {min_mean_deg}.\n  The average high this week is {max_mean_deg}.\n'
+
+
+
 
 
 def generate_daily_summary(weather_data):
@@ -157,4 +190,28 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+    summary=""
+
+    for data in weather_data:
+    
+        date_format=convert_date(data[0])
+        min_deg_format=format_temperature(convert_f_to_c(data[1]))
+        max_deg_format=format_temperature(convert_f_to_c(data[2]))
+
+        summary+=f'---- {date_format} ----\n  Minimum Temperature: {min_deg_format}\n  Maximum Temperature: {max_deg_format}\n\n'
+    return summary   
+  
+
+
+print(generate_daily_summary( 
+        [
+            ["2020-06-19T07:00:00+08:00", 47, 46],
+            ["2020-06-20T07:00:00+08:00", 51, 67],
+            ["2020-06-21T07:00:00+08:00", 58, 72],
+            ["2020-06-22T07:00:00+08:00", 59, 71],
+            ["2020-06-23T07:00:00+08:00", 52, 71],
+            ["2020-06-24T07:00:00+08:00", 52, 67],
+            ["2020-06-25T07:00:00+08:00", 48, 66],
+            ["2020-06-26T07:00:00+08:00", 53, 66]
+        ]
+            ))
